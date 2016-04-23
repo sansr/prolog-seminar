@@ -3,6 +3,7 @@
 
 %% Representacion de los movimientos %%
 %% m(CasillaOrigen, CasillaDestino)  %%
+%% p(CasillaOrigen, CasillaDestino)  %%
 
 %% Representacion del tablero usado en el problema.
 %% Se representan las vecindades en horizontal: hor(casilla1, casilla2)
@@ -21,17 +22,32 @@ ver(l4, l7).
 ver(l5, l8).
 ver(l6, l9).
 
+%% %% %% %% TODO actualizar
 %% Predicado que permite comprobar si dos casillas con adyacentes
 %% segun su posicion en el tablero.
 
-adyacente(X, Y) :-
+pos(X, Y, left) :-
     hor(X, Y).
-adyacente(X, Y) :-
+pos(X, Y, right) :-
     hor(Y, X).
-adyacente(X, Y) :-
+pos(X, Y, top) :-
     ver(X, Y).
-adyacente(X, Y) :-
+pos(X, Y, bottom) :-
     ver(Y, X).
+%% adyacente(X, Y) :-
+%%     hor(X, Y).
+%% adyacente(X, Y) :-
+%%     hor(Y, X).
+%% adyacente(X, Y) :-
+%%     ver(X, Y).
+%% adyacente(X, Y) :-
+%%     ver(Y, X).
+
+%% Predicado que representa si una casilla esta ocupada: ocupada(Casilla) %%
+
+ocupada(cs(D, _, _), D).
+ocupada(cs(_, D, _), D).
+ocupada(cs(_, _, D), D).
 
 
 %% Representacion del estado inicial
@@ -52,20 +68,38 @@ initial_state(sokoban, cs(l7, l5, l6)).
 final_state(sokoban, cs(_, l8, l9)).
 final_state(sokoban, cs(_, l9, l8)).
 
-/*************************************/
-/* Table of moves.                   */
-/*************************************/
-/* move(androide, casilla) */
-move() :-
+%% Predicado de movimiento del androide                 %%
+%% El androide se puede mover si la casilla de destino  %%
+%% esta vacia y ademas es adyacente                     %%
+%% move(EstadoActual, MovimientoDeseado)                %%
 
-/* push(caja, casilla) */
-push() :-
+move(cs(A, C1, C2), m(A, D)) :-
+    pos(A, D, _),
+    not(ocupada(cs(A, C1, C2), D)).
+move(cs(A, C1, C2), p(A, C1, D)) :-
+    pos(A, C1, Pos),
+    pos(C1, D, Pos),
+    not(ocupada(cs(A, C1, C2), D)).
+move(cs(A, C1, C2), p(A, C2, D)) :-
+    pos(A, C2, Pos),
+    pos(C2, D, Pos),
+    not(ocupada(cs(A, C1, C2), D)).
+
+
+/******************************************************************/
+/* TODO   */
+/******************************************************************/
+update(cs(A, C1, C2), m(A, D), cs(D, C1, C2)).
+update(cs(A, C1, C2), p(A, C1, D), cs(C1, D, C2)).
+update(cs(A, C1, C2), p(A, C2, D), cs(C2, C1, D)).
+
 
 /******************************************************************/
 /* Checks whether a state is legal according to the constraints   */
 /* imposed by the problem\'s statement.                            */
 /******************************************************************/
-
+legal(cs(_, _, _)) :- 
+	!.
 
 /******************************************************/
 /* A reusable depth-first problem solving framework.  */
