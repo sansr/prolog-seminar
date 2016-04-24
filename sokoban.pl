@@ -1,3 +1,5 @@
+%%                   Autor: Sandra Saez Raspeño                              %%
+
 %% ------------------ Representacion del estado actual --------------------- %%
 %%         state(CasillaAndroide, CasillaCaja1, CasillaCaja2)                %%
 
@@ -9,9 +11,6 @@
 %%     - m(CasillaOrigenAndroide, CasillaDestinoAndroide)                    %%
 %%     - p(CasillaAndroide, CasillaCaja, CasillaDestino)                     %%
 
-%% Representacion del tablero usado en el problema.
-%% Se representan las vecindades en horizontal: hor(casilla1, casilla2)
-%% y las vecindades en vertical: ver(casilla1, casilla2).
 
 %% ----------- Representacion de la configuracion del problema ------------- %%
 %% hor(casilla1, casilla2): representa que las dos casillas son adyacentes   %%
@@ -80,14 +79,14 @@ final_state(sokoban, state(_, l9, l8)).
 %% Predicado move(state(casillaAndroide, casillaCaja1, casillaCaja2), m(casillaAndroide, casillaDestino))     %%
 %% y move(state(casillaAndroide, casillaCaja1, casillaCaja2), p(casillaAndroide, casillaDestino, direccion))  %%
 %%                                                                                                            %%
-%% El objetivo de estos predicados es el de representar las acciones del androide: moverse y                  %%
+%% El objetivo de estos predicados es el de representar los posibles movimientos: moverse (androide) y        %%
 %% empujar una caja. En el primer caso, unicamente es necesario comprobar que la casilla donde esta el        %%
 %% androide y la casilla destino a la que quiere moverse son adyacentes y que esta ultima esta vacia.         %%
-%% Por otro lado, en el caso de la accion empujar, hay que hacer dos comprobaciones de adyacencia. Se         %%
+%% Por otro lado, en el caso de empujar una caja, hay que hacer dos comprobaciones de adyacencia. Se          %%
 %% comprueba primero que la casilla donde esta el androide y donde esta la caja sean adyacentes.              %%
 %% Posteriormente hay que comprobar que la casilla de la caja y la casilla destino a la que se quiere empujar %%
-%% la caja son adyacentes. Finalmente, una vez comprobada la adyacencia se temina comprobando que la  casilla %%
-%% destino esta vacia.                                                                                        %%
+%% tambien son adyacentes y ademas en la misma direccion que el empuje del androide a la caja.                %%
+%% Finalmente, una vez comprobada la adyacencia se temina comprobando que la  casilla destino esta vacia.     %%
 
 move(state(A, C1, C2), m(A, D)) :-
     pos(A, D, _),
@@ -106,7 +105,7 @@ move(state(A, C1, C2), p(A, C2, D)) :-
 %% y update(state(casillaAndroide, casillaCaja1, casillaCaja2), p(casillaAndroide, casillaCaja, casillaDestino), %%
 %%                  state(nuevaCasillaAndroide, nuevaCasillaCaja1, nuevCasillaCaja2).                            %%
 %%                                                                                                               %%
-%% El objetivo de este predicado es el de efectuar un cambio en el estado actual mediante la aplicacion          %%
+%% El objetivo de este predicado es el de efectuar la actualizacion en el estado actual mediante la aplicacion   %%
 %% de uno de los movimientos especificados en el predicado move.                                                 %%
 
 update(state(A, C1, C2), m(A, D), state(D, C1, C2)).
